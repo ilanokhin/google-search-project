@@ -39,8 +39,8 @@ class Element:
     def click(self) -> None:
         self._elements[0].click()
 
-    def attribute_values(self, attribute: str = "") -> list:
-        if not attribute:
+    def attribute_values(self, attribute: str = "text") -> list:
+        if attribute == "text":
             attribute_values = [element.text for element in self._elements]
         else:
             attribute_values = []
@@ -53,8 +53,8 @@ class Element:
     def press(self, keys_to_press: Keys | str) -> None:
         self._elements[0].send_keys(str(keys_to_press))
 
-    def attribute(self, attribute: str = "") -> str:
-        if not attribute:
+    def attribute(self, attribute: str = "text") -> str:
+        if attribute == "text":
             attribute_value = self._elements[0].text
         else:
             attribute_value = self._elements[0].get_attribute(attribute)

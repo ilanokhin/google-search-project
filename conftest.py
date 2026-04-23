@@ -23,6 +23,7 @@ def driver(request: pytest.FixtureRequest):
         options.add_argument("--blink-settings=imagesEnabled=false")
     print(f"\nЗапускается браузер {browser_name}...")
     driver = webdriver.Firefox(options=options) if browser == "firefox" else webdriver.Chrome(options=options)
+    print("\nПроводятся тесты...")
     yield driver
     print(f"\nБраузер {browser_name} закрывается...")
     driver.quit()

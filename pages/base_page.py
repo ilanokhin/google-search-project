@@ -64,7 +64,7 @@ class BasePage:
         with allure.step(f" Нажать {keys_name} на элементе '{element_data[0]}'"):
             element.press(keys)
 
-    def get_elements_attribute(self, element_data: tuple, attribute: str = "", start_index: int = 0,
+    def get_elements_attribute(self, element_data: tuple, attribute: str = "text", start_index: int = 0,
                                end_index: int | None = None) -> list:
         element = Element(self.driver, element_data[1])
         attribute_list = element.attribute_values(attribute)
@@ -72,6 +72,31 @@ class BasePage:
         attribute_list = [value for i, value in enumerate(attribute_list) if start_index <= i < finish_index]
         return attribute_list
 
-    def get_element_attribute(self, element_data: tuple, attribute: str = ""):
+    def get_element_attribute(self, element_data: tuple, attribute: str = "text") -> str:
         element = Element(self.driver, element_data[1])
         return element.attribute(attribute)
+
+    def compare_elements(self, element1_data: tuple, element2_data: tuple, attribute_to_compare: str = "text",
+                         element2_old_value: str = "", element2_name: str = "", make_screenshot: bool = True) -> bool:
+        element1 = self.get_element_attribute(element1_data, attribute_to_compare)
+        if element2_old_value and element2_name:
+            element2 = element2_old_value
+            second_name = element2_name
+        else:
+            element2 = self.get_element_attribute(element2_data, attribute_to_compare)
+            second_name = element2_data[0]
+        with allure.step(f"Проверить соответствие элементов '{element1_data[0]}' и '{second_name}'"):
+            if make_screenshot:
+                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG)
+            assert element1 == element2, f"Элементы '{element1_data[0]}' и '{second_name}' не соответствуют"
+        return element1 == element2
+
+    def is_element_changed(self, element_data: tuple, old_attribute_value: str, attribute: str = "text",
+                           make_screenshot: bool = True) -> bool:
+        element = Element(self.driver, element_data[1])
+        result = element.is_attribute_changed(attribute, old_attribute_value)
+        with allure.step(f"Проверить, что элемент '{element_data[0]}' изменился"):
+            if make_screenshot:
+                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG)
+            assert result, f"Элемент '{element_data[0]}' не изменился"
+        return result
