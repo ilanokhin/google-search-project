@@ -20,12 +20,12 @@ class TestGoogleSearchSuite:
         page.check_element(element.HINT_LIST)
         with allure.step("Проверить, что в списке подсказок есть слово 'яндекс' (не в рекламном блоке)"):
             hints = "\n".join(page.get_elements_attribute(element.HINT_LIST_ITEM, start_index=1))
-            allure.attach(hints, attachment_type=allure.attachment_type.TEXT)
+            allure.attach(hints, attachment_type=allure.attachment_type.TEXT, name="Список подсказок")
             assert "яндекс" in hints, "Слова 'яндекс' нет в списке подсказок"
         page.execute_search(is_enter_pressed)
         with allure.step("Проверить, что в первых 5 результатах поиска есть ссылка на yandex.ru"):
             sites = "\n".join(page.get_elements_attribute(element.RESULTS_TABLE_ITEM_SITE, end_index=5))
-            allure.attach(sites, attachment_type=allure.attachment_type.TEXT)
+            allure.attach(sites, attachment_type=allure.attachment_type.TEXT, name="Сайты из результатов поиска")
             assert "yandex.ru" in sites, "Домен yandex.ru отсутствует среди первых пяти результатов"
 
     @allure.title("Картинки в Гугл")

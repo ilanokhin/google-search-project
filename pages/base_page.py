@@ -45,7 +45,7 @@ class BasePage:
             assert_error += "некликабельный или отсутствует"
         with allure.step(allure_step):
             if make_screenshot:
-                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG)
+                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG, name="Скриншот")
             assert result, assert_error
         return result
 
@@ -87,7 +87,7 @@ class BasePage:
             second_name = element2_data[0]
         with allure.step(f"Проверить соответствие элементов '{element1_data[0]}' и '{second_name}'"):
             if make_screenshot:
-                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG)
+                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG, name="Скриншот")
             assert element1 == element2, f"Элементы '{element1_data[0]}' и '{second_name}' не соответствуют"
         return element1 == element2
 
@@ -97,6 +97,6 @@ class BasePage:
         result = element.is_attribute_changed(attribute, old_attribute_value)
         with allure.step(f"Проверить, что элемент '{element_data[0]}' изменился"):
             if make_screenshot:
-                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG)
+                allure.attach(self.screenshot(), attachment_type=allure.attachment_type.PNG, name="Скриншот")
             assert result, f"Элемент '{element_data[0]}' не изменился"
         return result
